@@ -9,8 +9,7 @@ import java.io.IOException
 object Input {
   def readLines(inputFileName: String): ZStream[Blocking, IOException, String] = {
     val inputStream = Option(this.getClass.getClassLoader.getResourceAsStream(inputFileName))
-    val zioInputStream = ZIO.fromOption(inputStream)
-      .mapError({ case None => new IOException("not found")})
+    val zioInputStream = ZIO.fromOption(inputStream).orElseFail(new IOException("not found"))
     ZStream.fromInputStreamEffect(zioInputStream)
       .transduce(Transducer.utf8Decode)
       .transduce(ZTransducer.splitLines)

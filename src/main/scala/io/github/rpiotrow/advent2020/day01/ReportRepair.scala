@@ -1,6 +1,6 @@
 package io.github.rpiotrow.advent2020.day01
 
-import io.github.rpiotrow.advent2020.Input
+import io.github.rpiotrow.advent2020.{Input, Solution}
 import zio._
 import zio.blocking.Blocking
 import zio.console._
@@ -8,14 +8,11 @@ import zio.console._
 import java.io.IOException
 
 // https://adventofcode.com/2020/day/1
-object ReportRepair extends zio.App {
+object ReportRepair {
 
   private val SUM = 2020
 
-  def run(args: List[String]): URIO[ZEnv, ExitCode] =
-    myAppLogic.exitCode
-
-  val myAppLogic: ZIO[Console with Blocking, Serializable, Unit] = for {
+  val solution: Solution = for {
       set          <- readReportEntries
       twoEntries   <- ZIO.fromOption(findTwoEntries(set))
       _            <- putStrLn(s"Answer to part one is: ${multiply(twoEntries)}")
