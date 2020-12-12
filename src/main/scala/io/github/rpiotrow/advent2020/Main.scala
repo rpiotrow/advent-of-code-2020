@@ -39,6 +39,9 @@ object Main extends zio.App {
         config.day.fold(ZIO.collectAll(days.keys.map(solution)).map(_ => ()))(solution)
       case _ =>
         ZIO.fail("Invalid parameters!!!")
-    }).exitCode
+    }).foldM(
+      err => console.putStrLn(s"Execution failed: $err") *> IO.succeed(ExitCode.failure),
+      _   => IO.succeed(ExitCode.success)
+    )
 
 }

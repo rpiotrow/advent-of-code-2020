@@ -5,8 +5,6 @@ import zio._
 import zio.blocking.Blocking
 import zio.console._
 
-import java.io.IOException
-
 // https://adventofcode.com/2020/day/2
 object PasswordPhilosophy {
 
@@ -18,13 +16,13 @@ object PasswordPhilosophy {
     _                  <- putStrLn(s"There are ${countValid(secondPolicyEntries)} valid passwords for the second policy.")
   } yield ()
 
-  private def readLines: ZIO[Blocking, IOException, List[String]] =
+  private def readLines: ZIO[Blocking, String, List[String]] =
     Input.readLines("day02.input")
       .runCollect
       .map(_.toList)
 
-  private def parse(list: List[String]): Task[List[(FirstPasswordPolicy, Password)]] =
-    ZIO.collectAll(list.map(Parser.parsePolicyAndPassword)).mapError(new RuntimeException(_))
+  private def parse(list: List[String]): IO[String, List[(FirstPasswordPolicy, Password)]] =
+    ZIO.collectAll(list.map(Parser.parsePolicyAndPassword))
 
   private def countValid(list: List[(PasswordPolicy, Password)]): Int =
     list.count { case (policy, password) => policy.isPasswordValid(password) }

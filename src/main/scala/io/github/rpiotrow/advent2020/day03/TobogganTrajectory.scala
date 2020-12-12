@@ -35,7 +35,6 @@ object TobogganTrajectory {
 
   private def treeRowStream: ZStream[Blocking, String, TreeRow] = {
     Input.readLines("day03.input")
-      .mapError(_.getMessage)
       .mapM(TreeRow.fromString)
   }
 }

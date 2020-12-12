@@ -4,7 +4,7 @@ import zio.test.Assertion._
 import zio.test._
 
 object ParserSpec extends DefaultRunnableSpec {
-  def spec = suite("HelloWorldSpec")(
+  def spec = suite("ParserSpec")(
     testM("parse \"1-3 a: abcde\"") {
       for {
         parsed <- Parser.parsePolicyAndPassword("1-3 a: abcde")
