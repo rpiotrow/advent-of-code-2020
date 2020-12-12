@@ -22,7 +22,8 @@ object Main extends zio.App {
 
   private val days: Map[Int, Solution] = Map(
     1 -> day01.ReportRepair.solution,
-    2 -> day02.PasswordPhilosophy.solution
+    2 -> day02.PasswordPhilosophy.solution,
+    3 -> day03.TobogganTrajectory.solution
   )
 
   private def solution(day: Int): Solution = {
