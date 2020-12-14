@@ -1,12 +1,15 @@
 import sbt._
 
 object Versions {
-  val zio = "1.0.3"
+  val zio        = "1.0.3"
+  val cats       = "2.2.0"
 }
 
 object Dependencies {
   lazy val zio        = "dev.zio" %% "zio" % Versions.zio
   lazy val zioStreams = "dev.zio" %% "zio-streams" % Versions.zio
+  lazy val cats       = "org.typelevel" %% "cats-core" % Versions.cats
+
   lazy val scopt      = "com.github.scopt" %% "scopt" % "4.0.0"
 }
 

@@ -8,7 +8,7 @@ ThisBuild / organization     := "io.github.rpiotrow"
 lazy val root = (project in file("."))
   .settings(
     name := "advent-of-code-2020",
-    libraryDependencies ++= Seq(zio, zioStreams, scopt, zioTest, zioTestSbt)
+    libraryDependencies ++= Seq(zio, zioStreams, cats, scopt, zioTest, zioTestSbt)
   )
 
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
