@@ -4,14 +4,14 @@ import zio.test.Assertion._
 import zio.test._
 
 object SecondPasswordPolicySpec extends DefaultRunnableSpec {
-  def spec = suite("SecondPasswordPolicySpec")(
-    test("policy 1-3 a") {
+  def spec = suite("day02: SecondPasswordPolicySpec")(
+    test("second password policy 1-3 a") {
       assert(SecondPasswordPolicy(1, 3, 'a').isPasswordValid(Password("abcde")))(equalTo(true))
     },
-    test("policy 1-3 b") {
+    test("second password policy 1-3 b") {
       assert(SecondPasswordPolicy(1, 3, 'b').isPasswordValid(Password("cdefg")))(equalTo(false))
     },
-    test("policy 2-9 c") {
+    test("second password policy 2-9 c") {
       assert(SecondPasswordPolicy(2, 9, 'c').isPasswordValid(Password("ccccccccc")))(equalTo(false))
     }
   )

@@ -4,8 +4,8 @@ import zio.test.Assertion.equalTo
 import zio.test._
 
 object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
-  def spec = suite("PassportRequiredFields")(
-    test("valid") {
+  def spec = suite("day 04: PassportRequiredFields")(
+    test("valid passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",
@@ -17,7 +17,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(true))
     },
-    test("invalid birthYear value") {
+    test("invalid birthYear value in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1900",
         issueYear = "2012",
@@ -29,7 +29,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid birthYear text") {
+    test("invalid birthYear text in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "do-not-remember",
         issueYear = "2012",
@@ -41,7 +41,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid issueYear") {
+    test("invalid issueYear in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "1985",
@@ -53,7 +53,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid expirationYear") {
+    test("invalid expirationYear in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",
@@ -65,7 +65,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid height") {
+    test("invalid height in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",
@@ -77,7 +77,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid hairColor") {
+    test("invalid hairColor in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",
@@ -89,7 +89,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid eyeColor") {
+    test("invalid eyeColor in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",
@@ -101,7 +101,7 @@ object PassportRequiredFieldsSpec extends DefaultRunnableSpec {
       )
       assert(fields.areValid)(equalTo(false))
     },
-    test("invalid passportID") {
+    test("invalid passportID in passport required fields") {
       val fields = PassportRequiredFields(
         birthYear = "1980",
         issueYear = "2012",

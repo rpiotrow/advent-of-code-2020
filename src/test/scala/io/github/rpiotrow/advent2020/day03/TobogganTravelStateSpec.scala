@@ -4,7 +4,7 @@ import zio.test.Assertion.equalTo
 import zio.test._
 
 object TobogganTravelStateSpec extends DefaultRunnableSpec {
-  def spec = suite("TobogganTravelState")(
+  def spec = suite("day03: TobogganTravelState")(
     testM("..##....... x=0") {
       for {
         treeRow <- TreeRow.fromString("..##.......")
