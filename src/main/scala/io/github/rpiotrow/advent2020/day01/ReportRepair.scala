@@ -5,8 +5,6 @@ import zio._
 import zio.blocking.Blocking
 import zio.console._
 
-import java.io.IOException
-
 // https://adventofcode.com/2020/day/1
 object ReportRepair {
 
@@ -16,9 +14,9 @@ object ReportRepair {
       set           <- readReportEntries
       twoEntries    <- ZIO.fromOption(findTwoEntries(set)).orElseFail("solution not found")
       multiplyTwo   =  multiply(twoEntries)
-      _             <- putStrLn(s"Answer to part one is: $multiplyTwo")
       threeEntries  <- ZIO.fromOption(findThreeEntries(makeProduct(set.toList), set)).orElseFail("solution not found")
       multiplyThree =  multiply(threeEntries)
+      _             <- putStrLn(s"Answer to part one is: $multiplyTwo")
       _             <- putStrLn(s"Answer to part two is: $multiplyThree")
     } yield (multiplyTwo, multiplyThree)
 

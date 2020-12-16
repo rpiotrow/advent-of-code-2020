@@ -6,24 +6,24 @@ import zio.blocking.Blocking
 import zio.console.putStrLn
 import zio.stream.{ZStream, ZTransducer}
 
+// https://adventofcode.com/2020/day/4
 object PassportProcessing {
 
-  val solution: Solution = {
+  val solution: Solution =
     readPassports
       .map(_.requiredFields)
       .filter(_.isDefined)
       .broadcast(2, 10).use {
         case stream1::stream2::Nil => for {
-          part1 <- countPresent(stream1).fork
-          part2 <- countValid(stream2).fork
+          part1        <- countPresent(stream1).fork
+          part2        <- countValid(stream2).fork
           presentCount <- part1.join
-          validCount <- part2.join
-          _ <- putStrLn(s"There are $presentCount passports with required fields present.")
-          _ <- putStrLn(s"There are $validCount passports with required fields present and valid.")
+          validCount   <- part2.join
+          _            <- putStrLn(s"There are $presentCount passports with required fields present.")
+          _            <- putStrLn(s"There are $validCount passports with required fields present and valid.")
         } yield (presentCount, validCount)
-        case _ => ZIO.dieMessage("cannot happen")
+        case _ => ZIO.dieMessage("impossible")
       }
-  }
 
   private def countPresent(stream: ZStream[Any, String, Option[PassportRequiredFields]]) =
     stream.runCount
