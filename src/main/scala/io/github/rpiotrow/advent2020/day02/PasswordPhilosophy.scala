@@ -9,12 +9,14 @@ import zio.console._
 object PasswordPhilosophy {
 
   val solution: Solution = for {
-    lines              <- readLines
-    firstPolicyEntries <- parse(lines)
-    _                  <- putStrLn(s"There are ${countValid(firstPolicyEntries)} valid passwords for the first policy.")
+    lines               <- readLines
+    firstPolicyEntries  <- parse(lines)
+    countValidFirst     =  countValid(firstPolicyEntries)
+    _                   <- putStrLn(s"There are $countValidFirst valid passwords for the first policy.")
     secondPolicyEntries = firstPolicyEntries.map({ case (policy, password) => (policy.toSecondPolicy, password)} )
-    _                  <- putStrLn(s"There are ${countValid(secondPolicyEntries)} valid passwords for the second policy.")
-  } yield ()
+    countValidSecond    = countValid(secondPolicyEntries)
+    _                   <- putStrLn(s"There are $countValidSecond valid passwords for the second policy.")
+  } yield (countValidFirst, countValidSecond)
 
   private def readLines: ZIO[Blocking, String, List[String]] =
     Input.readLines("day02.input")

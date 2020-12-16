@@ -12,16 +12,16 @@ object TobogganTrajectory {
 
   val solution: Solution =
     for {
-      slope31        <- travel(3, stream1)
-      _              <- putStrLn(s"You would encounter ${slope31.treesEncountered} trees.")
       slope11        <- travel(1, stream1)
+      slope31        <- travel(3, stream1)
       slope51        <- travel(5, stream1)
       slope71        <- travel(7, stream1)
       slope12        <- travel(1, stream2)
       list           =  List(slope11, slope31, slope51, slope71, slope12)
       multiplication =  list.map(_.treesEncountered.toLong).product
+      _              <- putStrLn(s"You would encounter ${slope31.treesEncountered} trees.")
       _              <- putStrLn(s"Multiplication of number of trees encountered on each of the slopes is $multiplication.")
-    } yield ()
+    } yield (slope31.treesEncountered, multiplication)
 
   private def travel[R](right: Int, stream: ZStream[R, String, TreeRow]): ZIO[R, String, TobogganTravelState] =
     stream.run(Sink.foldLeft(TobogganTravelState(-right))((state, row) => state.down(row, right)))

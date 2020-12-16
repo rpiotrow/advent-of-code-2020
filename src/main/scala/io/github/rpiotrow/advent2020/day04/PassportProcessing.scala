@@ -20,7 +20,7 @@ object PassportProcessing {
           validCount <- part2.join
           _ <- putStrLn(s"There are $presentCount passports with required fields present.")
           _ <- putStrLn(s"There are $validCount passports with required fields present and valid.")
-        } yield ()
+        } yield (presentCount, validCount)
         case _ => ZIO.dieMessage("cannot happen")
       }
   }

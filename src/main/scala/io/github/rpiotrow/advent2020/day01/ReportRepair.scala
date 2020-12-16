@@ -13,12 +13,14 @@ object ReportRepair {
   private val SUM = 2020
 
   val solution: Solution = for {
-      set          <- readReportEntries
-      twoEntries   <- ZIO.fromOption(findTwoEntries(set)).orElseFail("solution not found")
-      _            <- putStrLn(s"Answer to part one is: ${multiply(twoEntries)}")
-      threeEntries <- ZIO.fromOption(findThreeEntries(makeProduct(set.toList), set)).orElseFail("solution not found")
-      _            <- putStrLn(s"Answer to part two is: ${multiply(threeEntries)}")
-    } yield ()
+      set           <- readReportEntries
+      twoEntries    <- ZIO.fromOption(findTwoEntries(set)).orElseFail("solution not found")
+      multiplyTwo   =  multiply(twoEntries)
+      _             <- putStrLn(s"Answer to part one is: $multiplyTwo")
+      threeEntries  <- ZIO.fromOption(findThreeEntries(makeProduct(set.toList), set)).orElseFail("solution not found")
+      multiplyThree =  multiply(threeEntries)
+      _             <- putStrLn(s"Answer to part two is: $multiplyThree")
+    } yield (multiplyTwo, multiplyThree)
 
   private def readReportEntries: ZIO[Blocking, String, Set[Int]] =
     Input.readLines("day01.input")

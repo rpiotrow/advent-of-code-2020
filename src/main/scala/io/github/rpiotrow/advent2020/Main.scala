@@ -27,7 +27,7 @@ object Main extends zio.App {
     4 -> day04.PassportProcessing.solution
   )
 
-  private def solution(day: Int): Solution = {
+  private def solution(day: Int): ZIO[ZEnv, String, Unit] = {
     for {
       _ <- console.putStrLnErr(s"Day: $day")
       _ <- days.getOrElse(day, ZIO.fail("There is no such day!!!"))
