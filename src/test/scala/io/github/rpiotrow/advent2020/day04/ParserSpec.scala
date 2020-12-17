@@ -25,4 +25,3 @@ object ParserSpec extends DefaultRunnableSpec {
     }
   )
 }
-
