@@ -25,7 +25,8 @@ object Main extends zio.App {
     2 -> day02.PasswordPhilosophy.solution,
     3 -> day03.TobogganTrajectory.solution,
     4 -> day04.PassportProcessing.solution,
-    5 -> day05.BinaryBoarding.solution
+    5 -> day05.BinaryBoarding.solution,
+    6 -> day06.CustomCustoms.solution
   )
 
   private def solution(day: Int): ZIO[ZEnv, String, Unit] = {
