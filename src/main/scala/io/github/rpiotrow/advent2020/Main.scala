@@ -28,7 +28,8 @@ object Main extends zio.App {
     5 -> day05.BinaryBoarding.solution,
     6 -> day06.CustomCustoms.solution,
     7 -> day07.HandyHaversacks.solution,
-    8 -> day08.HandheldHalting.solution
+    8 -> day08.HandheldHalting.solution,
+    9 -> day09.EncodingError.solution
   )
 
   private def solution(day: Int): ZIO[ZEnv, String, Unit] = {
