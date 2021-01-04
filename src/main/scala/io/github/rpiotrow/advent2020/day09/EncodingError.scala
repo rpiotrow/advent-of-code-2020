@@ -7,7 +7,7 @@ object EncodingError {
 
   val solution: Solution =
     for {
-      list     <- readNumbers
+      list     <- Input.readNumbers("day09.input")
       encoding =  new Encoding(list, 25)
       first    <- encoding.findFirstNotMatching
       range    <- encoding.findContiguousRange(first)
@@ -16,10 +16,4 @@ object EncodingError {
       _ <- console.putStrLn(s"Sum of smallest and largest numbers from the contiguous range is $sum")
     } yield (first, sum)
 
-  private def readNumbers =
-    Input
-      .readLines("day09.input")
-      .mapM(line => ZIO.effect(line.toLong).orElseFail(s"invalid number: $line"))
-      .runCollect
-      .map(_.toList)
 }
