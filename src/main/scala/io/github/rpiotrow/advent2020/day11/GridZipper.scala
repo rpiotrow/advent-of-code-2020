@@ -7,28 +7,52 @@ import zio._
 
 case class GridZipper[A](value: Zipper[Zipper[A]]) {
 
-  def maybeNorth: Option[GridZipper[A]] =
+  def getNeighbors: List[A] =
+    List(
+      maybeNorth,
+      maybeEast,
+      maybeSouth,
+      maybeWest,
+      maybeNorth.flatMap(_.maybeEast),
+      maybeNorth.flatMap(_.maybeWest),
+      maybeSouth.flatMap(_.maybeEast),
+      maybeSouth.flatMap(_.maybeWest)
+    ).mapFilter[A](_.map(_.extract))
+
+  def getVisibles(transparent: A): List[A] = {
+    def firstFirstInDirection(direction: GridZipper[A] => Option[GridZipper[A]]): Option[A] =
+      LazyList
+        .unfold(this)(direction(_).map(x => (x, x)))
+        .map(_.extract)
+        .find(_ != transparent)
+
+    List(
+      firstFirstInDirection(_.maybeNorth),
+      firstFirstInDirection(_.maybeEast),
+      firstFirstInDirection(_.maybeSouth),
+      firstFirstInDirection(_.maybeWest),
+      firstFirstInDirection(_.maybeNorthEast),
+      firstFirstInDirection(_.maybeNorthWest),
+      firstFirstInDirection(_.maybeSouthEast),
+      firstFirstInDirection(_.maybeSouthWest)
+    ).mapFilter[A](identity)
+  }
+
+  private def maybeNorth: Option[GridZipper[A]] =
     value.maybeMoveLeft.map(GridZipper(_))
-  def maybeSouth: Option[GridZipper[A]] =
+  private def maybeSouth: Option[GridZipper[A]] =
     value.maybeMoveRight.map(GridZipper(_))
-  def maybeEast: Option[GridZipper[A]] =
+  private def maybeEast: Option[GridZipper[A]] =
     if (value.extract.right.isEmpty) None
     else Some(GridZipper(value.map(_.unsafeMoveRight)))
-  def maybeWest: Option[GridZipper[A]] =
+  private def maybeWest: Option[GridZipper[A]] =
     if (value.extract.left.isEmpty) None
     else Some(GridZipper(value.map(_.unsafeMoveLeft)))
 
-  def getNeighbors: List[A] =
-    List(
-      this.maybeNorth,
-      this.maybeEast,
-      this.maybeSouth,
-      this.maybeWest,
-      this.maybeNorth.flatMap(_.maybeEast),
-      this.maybeNorth.flatMap(_.maybeWest),
-      this.maybeSouth.flatMap(_.maybeEast),
-      this.maybeSouth.flatMap(_.maybeWest)
-    ).mapFilter[A](_.map(_.extract))
+  private def maybeNorthEast: Option[GridZipper[A]] = maybeNorth.flatMap(_.maybeEast)
+  private def maybeNorthWest: Option[GridZipper[A]] = maybeNorth.flatMap(_.maybeWest)
+  private def maybeSouthEast: Option[GridZipper[A]] = maybeSouth.flatMap(_.maybeEast)
+  private def maybeSouthWest: Option[GridZipper[A]] = maybeSouth.flatMap(_.maybeWest)
 }
 
 object GridZipper extends GridZipperInstances {

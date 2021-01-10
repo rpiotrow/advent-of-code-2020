@@ -9,10 +9,11 @@ object SeatingSystem {
   val solution: Solution =
     for {
       waitingArea <- readWaitingArea
-      firstCount  <- waitingArea.occupiedCountWhenStable
+      firstCount  <- waitingArea.occupiedCountWhenStable(LifecycleRules.neighboursRules)
+      secondCount <- waitingArea.occupiedCountWhenStable(LifecycleRules.visibilityRules)
       _ <- console.putStrLn(s"$firstCount seats end up occupied when following first rules")
-      _ <- console.putStrLn(s"??? seats end up occupied when following second rules")
-    } yield (firstCount, 0L)
+      _ <- console.putStrLn(s"$secondCount seats end up occupied when following second rules")
+    } yield (firstCount, secondCount)
 
   private def readWaitingArea: ZIO[Blocking, String, WaitingArea] =
     Input

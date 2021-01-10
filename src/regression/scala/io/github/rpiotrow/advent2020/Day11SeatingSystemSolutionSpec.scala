@@ -9,7 +9,7 @@ object Day11SeatingSystemSolutionSpec extends DefaultRunnableSpec {
     testM("SeatingSystem solution") {
       for {
         solution <- SeatingSystem.solution
-      } yield assert(solution)(equalTo((2359L, 0L)))
+      } yield assert(solution)(equalTo((2359L, 2131L)))
     }
   )
 }
