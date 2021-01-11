@@ -2,7 +2,7 @@ package io.github.rpiotrow.advent2020.day11
 
 import cats.implicits._
 import cats.{Comonad, Show}
-import io.github.rpiotrow.advent2020.day11.UnorderedFoldableWithInitValue._
+import io.github.rpiotrow.advent2020.day11.Countable.CountableOps
 import zio._
 
 case class GridZipper[A](value: Zipper[Zipper[A]]) {
@@ -107,12 +107,12 @@ trait GridZipperInstances {
     }
   }
 
-  implicit val gridZipperUnorderedFoldableWithInitValue: UnorderedFoldableWithInitValue[GridZipper] =
-    new UnorderedFoldableWithInitValue[GridZipper] {
-      override def unorderedFold[A, B](gridZipper: GridZipper[A])(z: B)(f: (B, A) => B): B = {
-        val leftFolded = gridZipper.value.left.foldLeft(z)((acc, zipper) => zipper.unorderedFold(acc)(f))
-        val focusFolded = gridZipper.value.focus.unorderedFold(leftFolded)(f)
-        gridZipper.value.right.foldLeft(focusFolded)((acc, zipper) => zipper.unorderedFold(acc)(f))
+  implicit val gridZipperCountable: Countable[GridZipper] =
+    new Countable[GridZipper] {
+      override def count[A](gridZipper: GridZipper[A])(f: A => Boolean): Int = {
+        val leftCount = gridZipper.value.left.foldLeft(0)(_ + _.count(f))
+        val focusCount = gridZipper.value.focus.count(f)
+        gridZipper.value.right.foldLeft(leftCount + focusCount)(_ + _.count(f))
       }
     }
 

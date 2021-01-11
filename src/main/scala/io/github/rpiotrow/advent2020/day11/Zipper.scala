@@ -49,9 +49,9 @@ trait ZipperInstances {
     }
   }
 
-  implicit val zipperUnorderedFoldableWithInitValue: UnorderedFoldableWithInitValue[Zipper] =
-    new UnorderedFoldableWithInitValue[Zipper] {
-      override def unorderedFold[A, B](zipper: Zipper[A])(z: B)(f: (B, A) => B): B =
-        zipper.right.foldLeft(f(zipper.left.foldLeft(z)(f), zipper.focus))(f)
+  implicit val zipperCountable: Countable[Zipper] =
+    new Countable[Zipper] {
+      override def count[A](zipper: Zipper[A])(f: A => Boolean): Int =
+        zipper.left.count(f) + (if (f(zipper.focus)) 1 else 0) + zipper.right.count(f)
     }
 }
