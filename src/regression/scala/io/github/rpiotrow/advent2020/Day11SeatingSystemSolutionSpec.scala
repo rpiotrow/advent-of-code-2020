@@ -1,6 +1,6 @@
 package io.github.rpiotrow.advent2020
 
-import io.github.rpiotrow.advent2020.day11.SeatingSystem
+import io.github.rpiotrow.advent2020.day11.zippers.SeatingSystem
 import zio.test.Assertion._
 import zio.test._
 

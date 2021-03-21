@@ -1,5 +1,6 @@
 package io.github.rpiotrow.advent2020
 
+import io.github.rpiotrow.advent2020.day11.zippers.SeatingSystem
 import scopt.OParser
 import zio._
 
@@ -31,7 +32,8 @@ object Main extends zio.App {
     8 -> day08.HandheldHalting.solution,
     9 -> day09.EncodingError.solution,
     10 -> day10.AdapterArray.solution,
-    11 -> day11.SeatingSystem.solution
+//    11 -> day11.zippers.SeatingSystem.solution
+    11 -> day11.zzippers.SeatingSystem.solution
   )
 
   private def solution(day: Int): ZIO[ZEnv, String, Unit] = {

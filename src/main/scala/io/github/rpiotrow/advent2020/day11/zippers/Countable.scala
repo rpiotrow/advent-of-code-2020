@@ -1,4 +1,4 @@
-package io.github.rpiotrow.advent2020.day11
+package io.github.rpiotrow.advent2020.day11.zippers
 
 trait Countable[F[_]] {
   def count[A](fa: F[A])(f: A => Boolean): Int

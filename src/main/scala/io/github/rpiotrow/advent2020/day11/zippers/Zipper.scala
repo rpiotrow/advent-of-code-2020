@@ -1,14 +1,30 @@
-package io.github.rpiotrow.advent2020.day11
+package io.github.rpiotrow.advent2020.day11.zippers
 
 import cats.Comonad
 import zio._
 
 case class Zipper[A](left: LazyList[A], focus: A, right: LazyList[A]) {
 
+  def mapOption[B](f: A => Option[B]): Option[Zipper[B]] =
+    for {
+      l <- lazyListMapOption(left)(f)
+      fc <- f(focus)
+      r <- lazyListMapOption(right)(f)
+    } yield Zipper(l, fc, r)
+
+
+  private def lazyListMapOption[A, B](lazyList: LazyList[A])(f: A => Option[B]): Option[LazyList[B]] = lazyList match {
+    case LazyList() => Some(LazyList())
+    case h #:: t => for {
+      hh <- f(h)
+      tt <- lazyListMapOption(t)(f)
+    } yield hh #:: tt
+  }
+
   def maybeMoveLeft: Option[Zipper[A]] =
-    if (left.isEmpty) None else Some(unsafeMoveLeft)
+    left.headOption.map(head => Zipper(left.tail, head, focus #:: right))
   def maybeMoveRight: Option[Zipper[A]] =
-    if (right.isEmpty) None else Some(unsafeMoveRight)
+    right.headOption.map(head => Zipper(focus #:: left, head, right.tail))
 
   def unsafeMoveLeft: Zipper[A] =
     Zipper(left.tail, left.head, focus #:: right)

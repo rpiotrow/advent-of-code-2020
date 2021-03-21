@@ -1,8 +1,8 @@
-package io.github.rpiotrow.advent2020.day11
+package io.github.rpiotrow.advent2020.day11.zippers
 
 import cats.implicits._
 import cats.{Comonad, Show}
-import io.github.rpiotrow.advent2020.day11.Countable.CountableOps
+import io.github.rpiotrow.advent2020.day11.zippers.Countable.CountableOps
 import zio._
 
 case class GridZipper[A](value: Zipper[Zipper[A]]) {
@@ -20,21 +20,21 @@ case class GridZipper[A](value: Zipper[Zipper[A]]) {
     ).mapFilter[A](_.map(_.extract))
 
   def getVisibles(transparent: A): List[A] = {
-    def firstFirstInDirection(direction: GridZipper[A] => Option[GridZipper[A]]): Option[A] =
+    def firstInDirection(direction: GridZipper[A] => Option[GridZipper[A]]): Option[A] =
       LazyList
         .unfold(this)(direction(_).map(x => (x, x)))
         .map(_.extract)
         .find(_ != transparent)
 
     List(
-      firstFirstInDirection(_.maybeNorth),
-      firstFirstInDirection(_.maybeEast),
-      firstFirstInDirection(_.maybeSouth),
-      firstFirstInDirection(_.maybeWest),
-      firstFirstInDirection(_.maybeNorthEast),
-      firstFirstInDirection(_.maybeNorthWest),
-      firstFirstInDirection(_.maybeSouthEast),
-      firstFirstInDirection(_.maybeSouthWest)
+      firstInDirection(_.maybeNorth),
+      firstInDirection(_.maybeEast),
+      firstInDirection(_.maybeSouth),
+      firstInDirection(_.maybeWest),
+      firstInDirection(_.maybeNorthEast),
+      firstInDirection(_.maybeNorthWest),
+      firstInDirection(_.maybeSouthEast),
+      firstInDirection(_.maybeSouthWest)
     ).mapFilter[A](identity)
   }
 
@@ -43,11 +43,9 @@ case class GridZipper[A](value: Zipper[Zipper[A]]) {
   private def maybeSouth: Option[GridZipper[A]] =
     value.maybeMoveRight.map(GridZipper(_))
   private def maybeEast: Option[GridZipper[A]] =
-    if (value.extract.right.isEmpty) None
-    else Some(GridZipper(value.map(_.unsafeMoveRight)))
+    Option.when(value.extract.right.nonEmpty)(GridZipper(value.map(_.unsafeMoveRight)))
   private def maybeWest: Option[GridZipper[A]] =
-    if (value.extract.left.isEmpty) None
-    else Some(GridZipper(value.map(_.unsafeMoveLeft)))
+    Option.when(value.extract.left.nonEmpty)(GridZipper(value.map(_.unsafeMoveLeft)))
 
   private def maybeNorthEast: Option[GridZipper[A]] = maybeNorth.flatMap(_.maybeEast)
   private def maybeNorthWest: Option[GridZipper[A]] = maybeNorth.flatMap(_.maybeWest)
@@ -85,24 +83,18 @@ trait GridZipperInstances {
       private def duplicate[A](w: GridZipper[A]): GridZipper[GridZipper[A]] =
         map(GridZipper(nest(nest(w.value))))(GridZipper(_))
 
-      private def nest[A](s: Zipper[Zipper[A]]): Zipper[Zipper[Zipper[A]]] = {
+      private def makePair[A](x: A): (A, A) = (x, x)
+
+      private def nest[A](zippers: Zipper[Zipper[A]]): Zipper[Zipper[Zipper[A]]] = {
         val duplicateLefts: LazyList[Zipper[Zipper[A]]] =
-          LazyList.unfold(s)(zipper =>
-            if (zipper.extract.left.isEmpty) None
-            else {
-              val x = zipper.map(_.unsafeMoveLeft)
-              (x, x).some
-            }
+          LazyList.unfold(zippers)(zipper =>
+            Option.when(zipper.extract.left.nonEmpty)(makePair(zipper.map(_.unsafeMoveLeft)))
           )
         val duplicateRights: LazyList[Zipper[Zipper[A]]] =
-          LazyList.unfold(s)(zipper =>
-            if (zipper.extract.right.isEmpty) None
-            else {
-              val x = zipper.map(_.unsafeMoveRight)
-              (x, x).some
-            }
+          LazyList.unfold(zippers)(zipper =>
+            Option.when(zipper.extract.right.nonEmpty)(makePair(zipper.map(_.unsafeMoveRight)))
           )
-        Zipper(duplicateLefts, s, duplicateRights)
+        Zipper(duplicateLefts, zippers, duplicateRights)
       }
     }
   }
