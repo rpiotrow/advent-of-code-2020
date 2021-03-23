@@ -3,6 +3,8 @@ package io.github.rpiotrow.advent2020
 import scopt.OParser
 import zio._
 
+import scala.collection.immutable.ListMap
+
 case class Config(day: Option[Int] = None)
 
 object Config {
@@ -20,7 +22,7 @@ object Config {
 
 object Main extends zio.App {
 
-  private val days: Map[Int, Solution] = Map(
+  private val days: Map[Int, Solution] = ListMap(
     1 -> day01.ReportRepair.solution,
     2 -> day02.PasswordPhilosophy.solution,
     3 -> day03.TobogganTrajectory.solution,
@@ -36,7 +38,7 @@ object Main extends zio.App {
 
   private def solution(day: Int): ZIO[ZEnv, String, Unit] = {
     for {
-      _ <- console.putStrLnErr(s"Day: $day")
+      _ <- console.putStrLn(s"Day: $day")
       _ <- days.getOrElse(day, ZIO.fail("There is no such day!!!"))
     } yield ()
   }
@@ -44,11 +46,13 @@ object Main extends zio.App {
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
     (OParser.parse(Config.parser, args, Config()) match {
       case Some(config) =>
-        config.day.fold(ZIO.collectAll(days.keys.map(solution)).map(_ => ()))(solution)
+        config.day
+          .map(solution)
+          .getOrElse(ZIO.foreach(days.keys)(solution).unit)
       case _ =>
         ZIO.fail("Invalid parameters!!!")
     }).foldM(
-      err => console.putStrLn(s"Execution failed: $err") *> IO.succeed(ExitCode.failure),
+      err => console.putStrLn(s"Execution failed: $err").exitCode,
       _   => IO.succeed(ExitCode.success)
     )
 
