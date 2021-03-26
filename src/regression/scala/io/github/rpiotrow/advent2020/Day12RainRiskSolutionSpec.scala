@@ -5,11 +5,12 @@ import zio.test.Assertion._
 import zio.test._
 
 object Day12RainRiskSolutionSpec extends DefaultRunnableSpec {
-  def spec = suite("RainRiskSolutionSpec")(
-    testM("RainRisk solution") {
-      for {
-        solution <- RainRisk.solution
-      } yield assert(solution)(equalTo((845L, -1L)))
-    }
-  )
+  def spec =
+    suite("RainRiskSolutionSpec")(
+      testM("RainRisk solution") {
+        for {
+          solution <- RainRisk.solution
+        } yield assert(solution)(equalTo((845L, 27016L)))
+      }
+    )
 }
