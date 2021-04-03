@@ -35,7 +35,8 @@ object Main extends zio.App {
     10 -> day10.AdapterArray.solution,
     11 -> day11.SeatingSystem.solution,
     12 -> day12.RainRisk.solution,
-    13 -> day13.ShuttleSearch.solution
+    13 -> day13.ShuttleSearch.solution,
+    14 -> day14.DockingData.solution
   )
 
   private def solution(day: Int): ZIO[ZEnv, String, Unit] = {
