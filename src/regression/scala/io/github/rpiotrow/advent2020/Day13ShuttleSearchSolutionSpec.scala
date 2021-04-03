@@ -10,7 +10,7 @@ object Day13ShuttleSearchSolutionSpec extends DefaultRunnableSpec {
       testM("ShuttleSearch solution") {
         for {
           solution <- ShuttleSearch.solution
-        } yield assert(solution)(equalTo((6559L, -1L)))
+        } yield assert(solution)(equalTo((6559L, 626670513163231L)))
       }
     )
 }
